@@ -364,7 +364,10 @@ export class ApiClient {
     * @param data The data returned by the service call.
     * @param {String} response The complete HTTP response.
     */
-
+    callApiCallback(error, data, response) {
+        console.log(error);
+        console.log(data);
+    }
     /**
     * Invokes the REST service using the supplied settings and parameters.
     * @param {String} path The base URL to invoke.
