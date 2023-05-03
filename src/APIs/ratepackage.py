@@ -64,16 +64,16 @@ def rate_package(id):
         print("Inserting rating into database")
         insert_rating(id, rating, cnx)
         
-        # Add time package was rated in PackageEntryHistory
-        print(f"Marking package with id = {id} as rated in PackageEntryHistory")
+        # Add time package was rated in PackageHistoryEntry
+        print(f"Marking package with id = {id} as rated in PackageHistoryEntry")
         mark_as_rated(id, cnx)
     else:
         # Update the rating in the database
         print("Updating rating in database")
         update_rating(id, rating, cnx)
         
-        # Add time package was updated in PackageEntryHistory
-        print("Marking id = {} as updated in PackageEntryHistory".format(id))
+        # Add time package was updated in PackageHistoryEntry
+        print("Marking id = {} as updated in PackageHistoryEntry".format(id))
         mark_as_updated(id, cnx)
 
     # cnx.close()
@@ -82,7 +82,7 @@ def rate_package(id):
 
 # Functions to interact with the database
 def mark_as_updated(id, cnx):
-    query = text("INSERT INTO PackageEntryHistory (ID, Username, Date, Action) VALUES (:id, :username, :date, :action)")
+    query = text("INSERT INTO PackageHistoryEntry (ID, Username, Date, Action) VALUES (:id, :username, :date, :action)")
     cnx.execute(query, parameters = {"id":id, "username":"ece30861defaultadminuser", "date":datetime.datetime.now(), "action":"UPDATE"})
     cnx.commit()
 
@@ -93,7 +93,7 @@ def update_rating(id, rating, cnx):
     cnx.commit()
 
 def mark_as_rated(id, cnx):
-    query = text("INSERT INTO PackageEntryHistory (ID, Username, Date, Action) VALUES (:id, :username, :date, :action)")
+    query = text("INSERT INTO PackageHistoryEntry (ID, Username, Date, Action) VALUES (:id, :username, :date, :action)")
     cnx.execute(query, parameters = {"id":id, "username":"ece30861defaultadminuser", "date":datetime.datetime.now(), "action":"RATE"})
     cnx.commit()
 
