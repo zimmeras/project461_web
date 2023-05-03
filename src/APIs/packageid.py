@@ -149,20 +149,15 @@ def get_package(id):
   print(f"PATH (get): {request.path} {request.method}")
   print(f"trying to get id = {id}")
   print(f"REQUEST BODY of get: {str(request.get_data())}")
-  # Connect to database
-  #bp.logger.info('Request body: %s', request.get_data())
-  #bp.logger.info('Request headers: %s', request.headers)
+  
   cnx = db_connect()
   
-
-  ####### DO ANOTHER MERGE 
-  # Get package from the database
-  #package = get_package(id, cnx)
   search_stmt = sqlalchemy.text("SELECT * FROM Package WHERE ID=:id")
   package = cnx.execute(search_stmt, parameters={"id": id}).fetchone()
   cnx.commit()
 
   if package is None:
+    print(f"package wanted to get doesn't exist")
     return make_response('', 404)
   
   metadata = {
@@ -176,7 +171,8 @@ def get_package(id):
   }
   response = {"metadata": metadata, "data": data}
   print(f"RESPONSE (get): {response}")
-  return jsonify(response)
+  result = make_response(response, 200)
+  return result
 
 # Function to interact with database
 def get_package(id, cnx):
@@ -184,17 +180,6 @@ def get_package(id, cnx):
     search_stmt = sqlalchemy.text("SELECT * FROM Package WHERE ID=:id")
     package = cnx.execute(search_stmt, parameters={"id": id}).fetchone()
     cnx.commit()
-
-    '''
-    cnx.reconnect()
-    cur = cnx.cursor(buffered = True)
-    cur.execute("SELECT * FROM Package WHERE ID = %s", (id,))
-    package = cur.fetchone()
-    cnx.commit()
-    cur.close()
-    cnx.close()
-    '''
-    # print(package)
     return package
 
 input_schema2 = {
@@ -223,18 +208,22 @@ input_schema2 = {
       "type": "object",
       "properties": {
         "Content": {
-          "type": "string"
+          "anyOf": [
+            {"type": "string"},
+            {"type": "null"}
+          ]
         },
         "URL": {
-          "type": "string"
+          "anyOf": [
+            {"type": "string"},
+            {"type": "null"}
+          ]
         },
         "JSProgram": {
           "type": "string"
         }
       },
       "required": [
-        "Content",
-        "URL",
         "JSProgram"
       ]
     }
@@ -250,14 +239,14 @@ input_schema2 = {
 def put_package(id):
   # Connect to database
   print(f"PATH (put package): {request.path} {request.method}")
-  print(f"REQUEST BODY: {str(request.get_data())}")
+  print(f"REQUEST BODY put: {str(request.get_data())}")
   if(len(str(request.get_data())) == 0):
      print(f"no request body for update package id = {id}")
   cnx = db_connect()
 
   if request.is_json:
     try:
-      validate(request.json, input_schema2)
+      jsonschema.validate(instance=request.json, schema=input_schema2)
   
       #check if package exists 
       package = get_package(id, cnx)
@@ -279,7 +268,7 @@ def put_package(id):
         print(f"both url and content is null for update package {id}")
         return make_response('', 400)
 
-      if request.json["URL"] == None:
+      if url == None:
         zip_file_bytes = base64.b64decode(content)
         zip_file_io = io.BytesIO(zip_file_bytes)
 
@@ -290,11 +279,11 @@ def put_package(id):
               package_json_bytes = zip_file.read(fileList[index])
               package_json_str = package_json_bytes.decode('utf-8')
               data = json.loads(package_json_str)
-              url = data['repository']['url']
+              url = data['homepage']
             else:
               zero = 0
 
-      if request.json["Content"] == None:
+      if content == None:
         owner, repo = url.split('/')[-2:]
         response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/zipball")
         content = base64.b64encode(response.content).decode('utf-8')
