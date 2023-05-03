@@ -65,7 +65,7 @@ def package():
             print(f"REQUEST BODY: {str(request.get_data())}")
             if request.json["Content"] == None and request.json["URL"] == None:
               print(f"post package both content and url are null")
-              return make_response('', 409)
+              return make_response('', 400)
             
             if "Content" in request.json and request.json["Content"] != None:
             #if "Content" in request.json:
@@ -264,7 +264,7 @@ def put_package(id):
       url = metadata["URL"]
       jsprogram = metadata["JSProgram"]
 
-      if request.json["URL"] == None and request.json["Content"] == None:
+      if url == None and content == None:
         print(f"both url and content is null for update package {id}")
         return make_response('', 400)
 
