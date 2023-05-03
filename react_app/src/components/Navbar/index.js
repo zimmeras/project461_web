@@ -3,6 +3,12 @@ import { Nav, NavLink, NavMenu }
 	from "./NavbarElements";
 import logo from "../../images/purdue.png";
 
+/*
+THIS COMPONENT WAS ADAPTED FROM THE CODE FROM GEEKSFORGEEKS.COM
+https://www.geeksforgeeks.org/how-to-create-a-multi-page-website-using-react-js/#
+
+*/
+
 const Navbar = () => {
 return (
 	<>
