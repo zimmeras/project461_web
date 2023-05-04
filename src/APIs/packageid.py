@@ -10,7 +10,7 @@ from flask.blueprints import Blueprint
 from .database import db_connect
 from .auth import *
 import requests
-#import re
+import re
 
 
 bp = Blueprint('packageid', __name__)
@@ -54,7 +54,6 @@ input_schema = {
 def package():
     # Connect to database
     cnx = db_connect()
-  
     global idvalue
     idvalue += 1
     # Expect JSON input
@@ -73,7 +72,6 @@ def package():
               jsprog = request.json["JSProgram"]
             
             
-            # BELOW
               zip_file_bytes = base64.b64decode(content)
               zip_file_io = io.BytesIO(zip_file_bytes)
 
@@ -89,7 +87,6 @@ def package():
                     url = data['repository']['url']
                   else:
                     zero = 0
-            #ABOVE
 
             if "URL" in request.json and request.json["URL"] != None:
               jsprog = request.json["JSProgram"]
@@ -112,6 +109,17 @@ def package():
 
             if package:
               return make_response('', 409)
+            
+            rate_url = "https://project461-web-fgnl7r7dtq-uc.a.run.app/package/" + str(id) + "/rate"
+            rResponse = requests.get(rate_url)
+            data = json.loads(rResponse.content)
+            if rResponse.status_code == 200:
+              print(f"RATE API RETURNED 200")
+              for key, value in data.items():
+                if isinstance(value, int) and value < 0.5:
+                  print(f"DISQUALIED")
+                  return make_response('', 424)
+            
 
             insert_stmt = sqlalchemy.text("INSERT INTO Package (ID, Name, Version, Content, JSProgram, URL) VALUES (:idvalue, :name, :version, :content, :jsprog, :url)")
             cnx.execute(insert_stmt, parameters={"idvalue": idvalue, "name": name, "version": version, "content": content, "jsprog": jsprog, "url": url})
@@ -346,14 +354,7 @@ def reset_package():
   search_stmt = sqlalchemy.text("DELETE FROM Package")
   cnx.execute(search_stmt)
   cnx.commit()
-  '''
-  cnx.reconnect()
-  cur = cnx.cursor()
-  cur.execute("DELETE FROM Package")
-  cnx.commit()
-  cur.close()
-  cnx.close()
-  '''
+ 
   return make_response('', 200)
 
 input_schema4 = {
@@ -370,8 +371,7 @@ input_schema4 = {
 @bp.route('/package/byRegEx', methods=['POST'], endpoint = 'regExEND')
 #@token_required
 def regex_package():
-  return make_response('', 502)
-'''
+  #return make_response('', 502)
   print(f"PATH (POST RegEx): {request.path} {request.method}")
   print(f"REQUEST BODY: {str(request.get_data())}")
   cnx = db_connect()
@@ -395,11 +395,53 @@ def regex_package():
       return make_response('', 400)
   else:
         return make_response('', 404)
-'''
+
 
 @bp.route('/packages', methods=['POST'], endpoint = 'packagesExEND')
 #@token_required
 def regex_package():
   print(f"PATH (/packages): {request.path} {request.method}")
   print(f"REQUEST BODY (packages): {str(request.get_data())}")
-  return make_response('',200)
+  
+  response = make_response()
+  return response('', 200)
+  '''
+  version_msg = request[0]["Version"]
+  version_name = request[0]["Name"]
+
+  offset = request.args.get('offset')
+
+  pattern = r"\((.*?)\)"
+  matches = re.findall(pattern, version_msg)
+
+  packages = [0] *4
+  if "Exact" not in version_msg:
+      packages[0] = None
+  else:
+    bounded = int(matches[0])
+
+  if "Bounded Range" not in version_msg:
+      packages[1] = None
+  else:
+      bounded = matches[1].split("-")
+
+  if "Carat" not in version_msg:
+      packages[2] = None
+  else:
+      packages[2] = matches[2]
+
+  if "Carat" not in version_msg:
+      packages[3] = None
+  else:
+      packages[3] = matches[3]
+
+  cnx = db_connect()
+    
+  search_stmt = sqlalchemy.text("SELECT Version, Name, ID FROM Package WHERE Name = : :name AND Version = :bounded OR Version BETWEEN :range1 AND :range2")
+  package = cnx.execute(search_stmt, parameters={"name": version_name, "bounded": bounded, "range1": bounded[0], "range2": bounded[1], }).fetchall()
+  cnx.commit()
+
+  last_inx = (offset * 3) - 1
+
+  return(package[(last_inx - 2): last_inx].jsonify)
+'''
