@@ -22,3 +22,6 @@ Functionality:
     -this command runs a test suite consisting of 20 separate test cases
     -10 good and 10 bad urls are included in this test suite
     -number of passed tests and line coverage % are printed to output 
+
+
+FOLLOW THE SPECIFICATIONS
