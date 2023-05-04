@@ -40,7 +40,6 @@ input_schema = {
 }
 
 
-
 def token_required(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -61,11 +60,11 @@ def token_required(func):
 
 @bp.route('/authenticate', methods=['PUT'])
 def generate_token():
-  '''
   response = make_response()
   response.status_code = 501
   return response
-  '''
+
+'''
   cnx = db_connect()
   if request.is_json:
       try:
@@ -103,33 +102,8 @@ def generate_token():
           response.headers['X-Authorization'] = token
           return response
 
-          #return token
-          '''
-          response = make_response(token)
-          response.headers['X-Authorization'] = token
-          response.status_code = 200
-          return response
-          '''
-
       except jsonschema.exceptions.ValidationError as err:
           return make_response('', 400)
   else:
       return make_response('', 501)
-
-
-# helpful function for knowing flask app is up
-@bp.route('/')
-def hello():
-    return "Hello there"
-
-# helpfful function for knowing the react app can access the flask app
-@bp.route("/andrew")
-def andrew():
-    return jsonify({"message": "flask app connected"})
-
-# Function to interact with database
-def select_user(username, isAdmin, password, cur):
-    query = ("SELECT * FROM User WHERE name = %s AND isAdmin = %s AND password = %s")
-    cur.execute(query, (username, isAdmin, password))
-    result = cur.fetchone()
-    return result
+'''

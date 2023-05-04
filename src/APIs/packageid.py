@@ -135,15 +135,9 @@ def package():
     else:
         return make_response('', 424)
 
-# Function to interact with database - legacy code 
-def post_package(content, jsprog, cur, name, version, url):
-    insert_query = "INSERT INTO Package (ID, Name, Version, Content, JSProgram, URL) VALUES (%s, %s, %s, %s, %s, %s)"
-    values = (idvalue, name, version, content, jsprog, url)
-    cur.execute(insert_query, values)
-
 
 @bp.route('/package/<int:id>', methods=['GET'], endpoint = 'getEND')
-@token_required
+#@token_required
 def get_package(id):
   print(f"PATH (get): {request.path} {request.method}")
   print(f"trying to get id = {id}")
@@ -175,7 +169,6 @@ def get_package(id):
 
 # Function to interact with database
 def get_package(id, cnx):
-
     search_stmt = sqlalchemy.text("SELECT * FROM Package WHERE ID=:id")
     package = cnx.execute(search_stmt, parameters={"id": id}).fetchone()
     cnx.commit()
@@ -234,7 +227,7 @@ input_schema2 = {
 }
 
 @bp.route('/package/<int:id>', methods=['PUT'], endpoint = 'putEND')
-@token_required
+#@token_required
 def put_package(id):
   # Connect to database
   print(f"PATH (put package): {request.path} {request.method}")
@@ -305,7 +298,7 @@ def update_package(id, cnx, name, version, content, url, jsprogram):
    
 
 @bp.route('/package/<int:id>', methods=['DELETE'], endpoint = 'deleteEND')
-@token_required
+#@token_required
 def delete_package(id):
   print(f"PATH (delete id): {request.path} {request.method}")
   print(f"REQUEST BODY: {str(request.get_data())}")
@@ -331,7 +324,7 @@ def delete_from_db(id, cnx):
 
 
 @bp.route('/reset', methods=['DELETE'], endpoint = 'resetEND')
-@token_required
+#@token_required
 def reset_package():
   print(f"PATH (/reset): {request.path} {request.method}")
   print(f"REQUEST BODY: {str(request.get_data())}")
@@ -355,7 +348,7 @@ input_schema4 = {
 
 
 @bp.route('/package/byRegEx', methods=['POST'], endpoint = 'regExEND')
-@token_required
+#@token_required
 def regex_package():
   print(f"PATH (POST RegEx): {request.path} {request.method}")
   print(f"REQUEST BODY: {str(request.get_data())}")
@@ -384,7 +377,7 @@ def regex_package():
 
 
 @bp.route('/packages', methods=['POST'], endpoint = 'packagesExEND')
-@token_required
+#@token_required
 def regex_package():
   print(f"PATH (/packages): {request.path} {request.method}")
   print(f"REQUEST BODY (packages): {str(request.get_data())}")

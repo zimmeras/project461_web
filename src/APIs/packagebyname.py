@@ -13,7 +13,7 @@ bp = Blueprint('packagebyname', __name__)
 
 # Returns all packages with name = Name from the database
 @bp.route('/package/byname/<string:Name>', methods=['GET'], endpoint='rateGET')
-@token_required
+#@token_required
 def get_package_by_name(Name):
     cursor = db_connect()
 
@@ -59,7 +59,7 @@ def get_user_data(cursor, package_entry_history, i):
     return userdata
 
 def get_package_entry(cursor, id):
-    query = text("SELECT * FROM PackageEntryHistory WHERE ID =:id")
+    query = text("SELECT * FROM PackageHistoryEntry WHERE ID =:id")
     entry = cursor.execute(query, parameters={"id":id}).fetchall()
     return entry
 
@@ -71,7 +71,7 @@ def get_ids(name, cursor):
 # Deletes all instances of a packages with name = Name from the database
 # Deletes entries in PackageEntryHistory, Package, PackageRating
 @bp.route('/package/byname/<string:Name>', methods=['DELETE'], endpoint='rateDELETE')
-@token_required
+#@token_required
 def delete_package_by_name(Name):
     cursor = db_connect()
 
@@ -89,7 +89,7 @@ def delete_package_by_name(Name):
         delete_from_PackageRating(cursor, id)
 
         # Delete all instances where id = id from PackageEntryHistory
-        print("Deleting id = {} from PackageEntryHistory".format(id))
+        print("Deleting id = {} from PackageHistoryEntry".format(id))
         delete_from_PackageEntryHistory(cursor, id)
 
     # Delete all instances where name = Name from Package
@@ -104,7 +104,7 @@ def delete_from_Package(Name, cursor):
     cursor.execute(query, parameters = {"Name":Name})
 
 def delete_from_PackageEntryHistory(cursor, id):
-    query = text("DELETE FROM PackageEntryHistory WHERE ID =:id")
+    query = text("DELETE FROM PackageHistoryEntry WHERE ID =:id")
     cursor.execute(query, parameters = {"id":id})
 
 def delete_from_PackageRating(cursor, id):
