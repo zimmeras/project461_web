@@ -1,0 +1,10 @@
+https://github.com/googleapis/gapic-generator-php
+https://github.com/michpolicht/CuteHMI
+https://github.com/czyt1988/SARibbon
+https://github.com/googleapis/python-documentai-toolbox
+https://www.npmjs.com/package/uuid
+https://www.npmjs.com/package/pactum
+https://www.npmjs.com/package/w-statistic
+https://www.npmjs.com/package/p-timeout
+https://www.npmjs.com/package/jsdoc
+https://www.npmjs.com/package/d-svg

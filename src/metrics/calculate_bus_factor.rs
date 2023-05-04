@@ -477,6 +477,126 @@ mod tests {
     }
 
     #[test]
+    fn test_get_urls_6() {
+        simple_log::info!("test URL 6");
+        let path = "./test/more_urls.txt";
+        let url_list: Vec<String> = get_urls(&path);
+
+        assert_eq!(url_list.len(), 10);
+        assert_ne!(url_list[0], "https://github.com/googleapis/gapic-generator-php");
+        assert_eq!(url_list[0], "https://github.com/googleapis/gapic-generator-php\r");
+        assert_ne!(url_list[0], "");
+        simple_log::info!("Read gapic url from file");
+
+        assert_ne!(url_list[1], "https://github.com/michpolicht/CuteHMI");
+        assert_eq!(url_list[1], "https://github.com/michpolicht/CuteHMI\r");
+        assert_ne!(url_list[1], "");
+        simple_log::info!("Read CuteHMI url from file");
+
+        assert_ne!(url_list[2], "https://github.com/czyt1988/SARibbon");
+        assert_eq!(url_list[2], "https://github.com/czyt1988/SARibbon\r");
+        assert_ne!(url_list[2], "");
+        simple_log::info!("Read SARibbon url from file");
+
+        assert_ne!(url_list[3], "https://github.com/googleapis/python-documentai-toolbox");
+        assert_eq!(url_list[3], "https://github.com/googleapis/python-documentai-toolbox\r");
+        assert_ne!(url_list[3], "");
+        simple_log::info!("Read toolbox url from file");
+
+        assert_ne!(url_list[4], "https://www.npmjs.com/package/uuid");
+        assert_eq!(url_list[4], "https://www.npmjs.com/package/uuid\r");
+        assert_ne!(url_list[4], "");
+        simple_log::info!("Read uuid url from file");
+
+        assert_ne!(url_list[5], "https://www.npmjs.com/package/pactum");
+        assert_eq!(url_list[5], "https://www.npmjs.com/package/pactum\r");
+        assert_ne!(url_list[5], "");
+        simple_log::info!("Read pactum url from file");
+
+        assert_ne!(url_list[6], "https://www.npmjs.com/package/w-statistic");
+        assert_eq!(url_list[6], "https://www.npmjs.com/package/w-statistic\r");
+        assert_ne!(url_list[6], "");
+        simple_log::info!("Read statistic url from file");
+
+        assert_ne!(url_list[7], "https://www.npmjs.com/package/p-timeout");
+        assert_eq!(url_list[7], "https://www.npmjs.com/package/p-timeout\r");
+        assert_ne!(url_list[7], "");
+        simple_log::info!("Read p-timeout url from file");
+
+        assert_ne!(url_list[8], "https://www.npmjs.com/package/jsdoc");
+        assert_eq!(url_list[8], "https://www.npmjs.com/package/jsdoc\r");
+        assert_ne!(url_list[8], "");
+        simple_log::info!("Read jsdoc url from file");
+
+        assert_eq!(url_list[9], "https://www.npmjs.com/package/d-svg");
+        assert_ne!(url_list[9], "https://www.npmjs.com/package/d-svg\r");
+        assert_ne!(url_list[9], "");
+        simple_log::info!("Read d-svg url from file");
+
+        simple_log::info!("test URL 6 success");
+    }
+
+    #[test]
+    fn test_get_urls_7() {
+        simple_log::info!("test URL 7");
+        let path = "./test/more_urls2.txt";
+        let url_list: Vec<String> = get_urls(&path);
+
+        assert_eq!(url_list.len(), 10);
+        assert_ne!(url_list[0], "https://www.npmjs.com/package/z-schema");
+        assert_eq!(url_list[0], "https://www.npmjs.com/package/z-schema\r");
+        assert_ne!(url_list[0], "");
+        simple_log::info!("Read z-schema url from file");
+
+        assert_ne!(url_list[1], "https://www.npmjs.com/package/shelljs");
+        assert_eq!(url_list[1], "https://www.npmjs.com/package/shelljs\r");
+        assert_ne!(url_list[1], "");
+        simple_log::info!("Read shelljs url from file");
+
+        assert_ne!(url_list[2], "https://www.npmjs.com/package/knex");
+        assert_eq!(url_list[2], "https://www.npmjs.com/package/knex\r");
+        assert_ne!(url_list[2], "");
+        simple_log::info!("Read knex url from file");
+
+        assert_ne!(url_list[3], "https://www.npmjs.com/package/less");
+        assert_eq!(url_list[3], "https://www.npmjs.com/package/less\r");
+        assert_ne!(url_list[3], "");
+        simple_log::info!("Read less url from file");
+
+        assert_ne!(url_list[4], "https://www.npmjs.com/package/q");
+        assert_eq!(url_list[4], "https://www.npmjs.com/package/q\r");
+        assert_ne!(url_list[4], "");
+        simple_log::info!("Read q url from file");
+
+        assert_ne!(url_list[5], "https://www.npmjs.com/package/xml-js");
+        assert_eq!(url_list[5], "https://www.npmjs.com/package/xml-js\r");
+        assert_ne!(url_list[5], "");
+        simple_log::info!("Read xml url from file");
+
+        assert_ne!(url_list[6], "https://github.com/AlDanial/cloc");
+        assert_eq!(url_list[6], "https://github.com/AlDanial/cloc\r");
+        assert_ne!(url_list[6], "");
+        simple_log::info!("Read cloc url from file");
+
+        assert_ne!(url_list[7], "https://github.com/gventuri/pandas-ai");
+        assert_eq!(url_list[7], "https://github.com/gventuri/pandas-ai\r");
+        assert_ne!(url_list[7], "");
+        simple_log::info!("Read pandas url from file");
+
+        assert_ne!(url_list[8], "https://github.com/xtekky/gpt4free");
+        assert_eq!(url_list[8], "https://github.com/xtekky/gpt4free\r");
+        assert_ne!(url_list[8], "");
+        simple_log::info!("Read gpt4 url from file");
+
+        assert_eq!(url_list[9], "https://github.com/Ryujinx/Ryujinx");
+        assert_ne!(url_list[9], "https://github.com/Ryujinx/Ryujinx\r");
+        assert_ne!(url_list[9], "");
+        simple_log::info!("Read ryu url from file");
+
+        simple_log::info!("test URL 7 success");
+    }
+
+    #[test]
     fn test_empty_file() {
         simple_log::info!("test empty file");
         let path = "./test/empty_file.txt";

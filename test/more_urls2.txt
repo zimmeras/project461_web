@@ -1,0 +1,10 @@
+https://www.npmjs.com/package/z-schema
+https://www.npmjs.com/package/shelljs
+https://www.npmjs.com/package/knex
+https://www.npmjs.com/package/less
+https://www.npmjs.com/package/q
+https://www.npmjs.com/package/xml-js
+https://github.com/AlDanial/cloc
+https://github.com/gventuri/pandas-ai
+https://github.com/xtekky/gpt4free
+https://github.com/Ryujinx/Ryujinx
