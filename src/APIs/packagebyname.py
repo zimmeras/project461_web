@@ -13,7 +13,7 @@ bp = Blueprint('packagebyname', __name__)
 
 # Returns all packages with name = Name from the database
 @bp.route('/package/byname/<string:Name>', methods=['GET'], endpoint='rateGET')
-#@token_required
+@token_required
 def get_package_by_name(Name):
     cursor = db_connect()
 
@@ -71,7 +71,7 @@ def get_ids(name, cursor):
 # Deletes all instances of a packages with name = Name from the database
 # Deletes entries in PackageEntryHistory, Package, PackageRating
 @bp.route('/package/byname/<string:Name>', methods=['DELETE'], endpoint='rateDELETE')
-#@token_required
+@token_required
 def delete_package_by_name(Name):
     cursor = db_connect()
 

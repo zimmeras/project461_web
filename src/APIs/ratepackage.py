@@ -22,7 +22,7 @@ bp = Blueprint('ratepackage', __name__)
 
 # Rates a package if it exists and stores the rating in PackageRating table
 @bp.route('/package/<int:id>/rate', methods=['GET'])
-#@token_required
+@token_required
 def rate_package(id):
     cnx = db_connect()
 

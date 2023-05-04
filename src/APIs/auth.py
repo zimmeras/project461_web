@@ -61,65 +61,61 @@ def token_required(func):
 
 @bp.route('/authenticate', methods=['PUT'])
 def generate_token():
+  '''
   response = make_response()
   response.status_code = 501
   return response
-    
-'''
-    cnx = db_connect()
-    if request.is_json:
-        try:
-            validate(request.json, input_schema)
-            username = request.json["User"]["name"]
-            isAdmin = request.json["User"]["isAdmin"]
-            password = request.json["Secret"]["password"]
+  '''
+  cnx = db_connect()
+  if request.is_json:
+      try:
+          validate(request.json, input_schema)
+          username = request.json["User"]["name"]
+          isAdmin = request.json["User"]["isAdmin"]
+          password = request.json["Secret"]["password"]
 
-            # cnx.reconnect()
-            #search_stmt = sqlalchemy.text("SELECT * FROM User WHERE name = %s AND isAdmin = %s AND password = %s")
-            
-            search_stmt = sqlalchemy.text("SELECT * FROM User WHERE name=:name AND isAdmin=:isAdmin AND password=:password")
-            result = cnx.execute(search_stmt, parameters={"name": username, "isAdmin": isAdmin, "password": password}).fetchone()
-            cnx.commit()
+          # cnx.reconnect()
+          #search_stmt = sqlalchemy.text("SELECT * FROM User WHERE name = %s AND isAdmin = %s AND password = %s")
+          
+          search_stmt = sqlalchemy.text("SELECT * FROM User WHERE name=:name AND isAdmin=:isAdmin AND password=:password")
+          result = cnx.execute(search_stmt, parameters={"name": username, "isAdmin": isAdmin, "password": password}).fetchone()
+          cnx.commit()
 
-            if not result:
-                return make_response('', 401)
-           
-            payload = {
-            'sub': username
-            }
-            expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=10)
+          if not result:
+              return make_response('', 401)
+          
+          payload = {
+          'sub': username
+          }
+          expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=10)
 
-            # Generate the JWT token
-            token = jwt.encode(
-                {
-                'exp': expiration_time,
-                'iat': datetime.datetime.utcnow(),
-                'payload': payload
-                },
-            'dyhgccydyxrtxttrxtrzxrt',
-            algorithm='HS256'
-            )
-            
-'''
-'''
-            response = make_response(token)
-            response.headers['X-Authorization'] = token
-            response.status_code = 200
-            return response
-'''
+          # Generate the JWT token
+          token = jwt.encode(
+              {
+              'exp': expiration_time,
+              'iat': datetime.datetime.utcnow(),
+              'payload': payload
+              },
+          'dyhgccydyxrtxttrxtrzxrt',
+          algorithm='HS256'
+          )
+          response = Response(token, status=200)
+          response.headers['X-Authorization'] = token
+          return response
 
-'''
-            response = Response(token, status=200, mimetype='text/plain')
-            response.headers['X-Authorization'] = token
-            return response
+          #return token
+          '''
+          response = make_response(token)
+          response.headers['X-Authorization'] = token
+          response.status_code = 200
+          return response
+          '''
 
-            #return token
+      except jsonschema.exceptions.ValidationError as err:
+          return make_response('', 400)
+  else:
+      return make_response('', 501)
 
-        except jsonschema.exceptions.ValidationError as err:
-            return make_response('', 400)
-    else:
-        return make_response('', 501)
-'''
 
 # helpful function for knowing flask app is up
 @bp.route('/')
